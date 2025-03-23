@@ -35,15 +35,21 @@ $_usage''');
     return;
   }
 
+  final idlFile = argResult['idl'] as String?;
+  if (idlFile != null && p.extension(idlFile) != '.idl') {
+    throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
+  }
+
   assert(p.fromUri(Platform.script).endsWith(_thisScript.toFilePath()));
 
   // Run `npm install` or `npm update` as needed.
-  final update = argResult['update'] as bool;
-  await _runProc(
-    'npm',
-    [update ? 'update' : 'install'],
-    workingDirectory: _bindingsGeneratorPath,
-  );
+  //TODO: uncomment
+  // final update = argResult['update'] as bool;
+  // await _runProc(
+  //   'npm',
+  //   [update ? 'update' : 'install'],
+  //   workingDirectory: _bindingsGeneratorPath,
+  // );
 
   // Compute JS type supertypes for union calculation in translator.
   await _generateJsTypeSupertypes();
@@ -67,10 +73,16 @@ $_usage''');
     );
   }
 
-  // Determine the set of previously generated files.
-  final domDir = Directory(p.join(_webPackagePath, 'lib', 'src', 'dom'));
+  Directory updatedDir;
+  if (idlFile == null) {
+    updatedDir = Directory(p.join(_webPackagePath, 'lib', 'src', 'dom'));
+  } else {
+    updatedDir =
+        Directory(p.join(_webPackagePath, 'lib', 'src', 'specific_bindings'));
+  }
+
   final existingFiles =
-      domDir.listSync(recursive: true).whereType<File>().where((file) {
+      updatedDir.listSync(recursive: true).whereType<File>().where((file) {
     if (!file.path.endsWith('.dart')) return false;
 
     final contents = file.readAsStringSync();
@@ -88,6 +100,7 @@ $_usage''');
       'main.mjs',
       '--output-directory=${p.join(_webPackagePath, 'lib', 'src')}',
       if (generateAll) '--generate-all',
+      if (idlFile != null) '--idl=$idlFile',
     ],
     workingDirectory: _bindingsGeneratorPath,
   );
@@ -263,4 +276,8 @@ final _parser = ArgParser()
   ..addFlag('generate-all',
       negatable: false,
       help: 'Generate bindings for all IDL definitions, including experimental '
-          'and non-standard APIs.');
+          'and non-standard APIs.')
+  ..addOption('idl',
+      abbr: 'i',
+      help: 'Generate bindings for an IDL file and its dependencies',
+      valueHelp: 'file.idl');
