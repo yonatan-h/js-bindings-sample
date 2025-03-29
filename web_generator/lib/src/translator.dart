@@ -1433,7 +1433,7 @@ class Translator {
         ..comments.addAll(licenseHeader)
         ..directives.addAll(files.map(code.Directive.export)));
 
-  TranslationResult translate() {
+  TranslationResult translate(String rootImportFileName) {
     // Create a root import that exports all of the other libraries.
     final dartLibraries = <String, code.Library>{};
 
@@ -1449,7 +1449,9 @@ class Translator {
       }
     }
 
-    dartLibraries['dom.dart'] = generateRootImport(dartLibraries.keys);
+    //The root import file can be specific_binding.dart instead of dom.dart if
+    // an idl file is specified
+    dartLibraries[rootImportFileName] = generateRootImport(dartLibraries.keys);
 
     return dartLibraries;
   }

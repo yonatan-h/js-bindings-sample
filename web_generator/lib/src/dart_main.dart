@@ -28,6 +28,8 @@ void main(List<String> args) async {
   final ArgResults argResult;
   argResult = _parser.parse(args);
 
+  //Double check the file extension here even if update_bindings.dart
+  //validates it
   final idlFile = argResult['idl'] as String?;
   if (idlFile != null && p.extension(idlFile) != '.idl') {
     throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
@@ -58,7 +60,6 @@ Future<void> _generateAndWriteBindings({
     final library = entry.value;
 
     final contents = _emitLibrary(library, languageVersion).toJS;
-
     fs.writeFileSync('$outputDirectory/$libraryPath'.toJS, contents);
   }
 }
@@ -78,11 +79,15 @@ String _emitLibrary(code.Library library, Version languageVersion) {
 final _parser = ArgParser()
   ..addOption('output-directory',
       mandatory: true, help: 'Directory where bindings will be generated to.')
-  ..addFlag('generate-all',
+
+  // Mirror the flags from update_bindings.dart to maintain consistency across
+  // the CLI tools
+  ..addFlag('consider-all',
       negatable: false,
-      help: 'Generate bindings for all IDL definitions, including experimental '
-          'and non-standard APIs.')
+      help:
+          'Allow non-standard/experimental api definitions to be also be used when generating bindings')
   ..addOption('idl',
       abbr: 'i',
-      help: 'Generate bindings for an IDL file and its dependencies',
+      help:
+          'Generate bindings for an IDL file and its dependencies. Choose file name from https://github.com/w3c/webref/tree/main/ed/idl',
       valueHelp: 'file.idl');

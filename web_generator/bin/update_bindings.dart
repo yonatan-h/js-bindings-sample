@@ -35,6 +35,7 @@ $_usage''');
     return;
   }
 
+  // Quick check to make sure it's working with an .idl file
   final idlFile = argResult['idl'] as String?;
   if (idlFile != null && p.extension(idlFile) != '.idl') {
     throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
@@ -73,6 +74,8 @@ $_usage''');
     );
   }
 
+// Different output locations to avoid mixing complete DOM bindings with
+// specific ones to keep the generated files more organized
   Directory updatedDir;
   if (idlFile == null) {
     updatedDir = Directory(p.join(_webPackagePath, 'lib', 'src', 'dom'));
@@ -99,7 +102,7 @@ $_usage''');
     [
       'main.mjs',
       '--output-directory=${p.join(_webPackagePath, 'lib', 'src')}',
-      if (generateAll) '--generate-all',
+      if (generateAll) '--include-all',
       if (idlFile != null) '--idl=$idlFile',
     ],
     workingDirectory: _bindingsGeneratorPath,

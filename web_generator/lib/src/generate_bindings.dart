@@ -81,6 +81,8 @@ Future<TranslationResult> generateBindings(
       generateAll: generateAll);
   final allIdl = await idl.parseAll().toDart;
 
+// To fail fast and provide a clear error if the requested IDL file
+// doesn't exist in webref
   if (idlFile != null) {
     final targetAst = allIdl[p.basenameWithoutExtension(idlFile)];
     if (targetAst == null) {
@@ -99,8 +101,10 @@ Future<TranslationResult> generateBindings(
   if (idlFile == null) {
     translator.addInterfacesAndNamespaces();
   } else {
+    // Seed the translator with our target IDL file first so that the
+    // translator can add other libraries the binding depends on.
     translator.addInterfacesAndNamespaces(
         shortName: p.basenameWithoutExtension(idlFile));
   }
-  return translator.translate();
+  return translator.translate(idlFile == null ? 'dom' : 'specific_bindings');
 }
