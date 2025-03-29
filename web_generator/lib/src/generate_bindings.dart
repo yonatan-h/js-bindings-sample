@@ -73,12 +73,12 @@ Future<Map<String, Set<String>>> _generateElementTagMap() async {
 
 Future<TranslationResult> generateBindings(
     String packageRoot, String librarySubDir,
-    {required bool generateAll, String? idlFile}) async {
+    {required bool considerAll, String? idlFile}) async {
   final cssStyleDeclarations = await _generateCSSStyleDeclarations();
   final elementHTMLMap = await _generateElementTagMap();
   final translator = Translator(
       packageRoot, librarySubDir, cssStyleDeclarations, elementHTMLMap,
-      generateAll: generateAll);
+      considerAll: considerAll);
   final allIdl = await idl.parseAll().toDart;
 
 // To fail fast and provide a clear error if the requested IDL file
@@ -106,5 +106,6 @@ Future<TranslationResult> generateBindings(
     translator.addInterfacesAndNamespaces(
         shortName: p.basenameWithoutExtension(idlFile));
   }
-  return translator.translate(idlFile == null ? 'dom' : 'specific_bindings');
+  return translator
+      .translate(idlFile == null ? 'dom.dart' : 'specific_bindings.dart');
 }

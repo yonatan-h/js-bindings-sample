@@ -96,13 +96,13 @@ $_usage''');
   };
 
   // Run app with `node`.
-  final generateAll = argResult['generate-all'] as bool;
+  final considerAll = argResult['consider-all'] as bool;
   await _runProc(
     'node',
     [
       'main.mjs',
       '--output-directory=${p.join(_webPackagePath, 'lib', 'src')}',
-      if (generateAll) '--include-all',
+      if (considerAll) '--consider-all',
       if (idlFile != null) '--idl=$idlFile',
     ],
     workingDirectory: _bindingsGeneratorPath,

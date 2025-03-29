@@ -671,10 +671,10 @@ class Translator {
 
   Translator(this.packageRoot, this._librarySubDir, this._cssStyleDeclarations,
       this._elementTagMap,
-      {required bool generateAll}) {
+      {required bool considerAll}) {
     instance = this;
     docProvider = DocProvider.create();
-    browserCompatData = BrowserCompatData.read(generateAll: generateAll);
+    browserCompatData = BrowserCompatData.read(generateAll: considerAll);
   }
 
   void _addOrUpdateInterfaceLike(idl.Interfacelike interfacelike) {

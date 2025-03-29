@@ -37,7 +37,7 @@ void main(List<String> args) async {
 
   await _generateAndWriteBindings(
     outputDirectory: argResult['output-directory'] as String,
-    generateAll: argResult['generate-all'] as bool,
+    considerAll: argResult['consider-all'] as bool,
     languageVersion: Version.parse(languageVersionString),
     idlFile: idlFile,
   );
@@ -45,7 +45,7 @@ void main(List<String> args) async {
 
 Future<void> _generateAndWriteBindings({
   required String outputDirectory,
-  required bool generateAll,
+  required bool considerAll,
   required Version languageVersion,
   String? idlFile,
 }) async {
@@ -54,7 +54,7 @@ Future<void> _generateAndWriteBindings({
   ensureDirectoryExists('$outputDirectory/$librarySubDir');
 
   final bindings = await generateBindings(packageRoot, librarySubDir,
-      generateAll: generateAll, idlFile: idlFile);
+      considerAll: considerAll, idlFile: idlFile);
   for (var entry in bindings.entries) {
     final libraryPath = entry.key;
     final library = entry.value;
