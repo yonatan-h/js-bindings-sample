@@ -731,9 +731,42 @@ class Translator {
     } else {
       final libraryPath = _generateLibraryPath(shortName: shortName);
       final library = _libraries[libraryPath];
+
       if (library == null) {
-        throw Exception('Library $libraryPath not found');
+        // Incase [shortName] has typos or incorrect path. The caller of
+        // this method should already check for this.
+        throw ArgumentError('$shortName.idl not found');
+      } else if (library.interfacelikes.isEmpty) {
+        //Incase users input IDL files such as beacon.idl, compat.idl, etc
+        // that have no bindable elements
+        throw ArgumentError('$shortName.idl has no interfacelikes'
+            'ie. interfaces, namespaces, nor dictionaries to emit bindings for ');
+      } else if (_usedTypes.isEmpty && !browserCompatData.generateAll) {
+        // Incase the idl file only contains experimental APIs
+        final isStable = library.interfacelikes.every((interfaceLike) {
+          final isSupported =
+              browserCompatData.shouldGenerateInterface(interfaceLike.name);
+          final isInterfaceType = interfaceLike.type == 'interface';
+          final isNamespaceType = interfaceLike.type == 'namespace';
+          final allAreConstants = interfaceLike.members.toDart
+              .every((member) => member.type == 'const');
+
+          if (isInterfaceType && !isSupported) return false;
+          if (isNamespaceType && !isSupported && !allAreConstants) return false;
+
+          return true;
+        });
+
+        if (!isStable) {
+          throw ArgumentError(
+              '"$shortName.idl" contains only experimental/non-standard APIs. '
+              'Use --consider-all to generate these bindings.');
+        }
+      } else if (_usedTypes.isEmpty) {
+        throw Exception(
+            'Failed to generate bindings for "$shortName.idl" (unknown reason).');
       }
+
       _addInterfacesAndNamespacesFor(library);
     }
   }

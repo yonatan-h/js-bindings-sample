@@ -55,6 +55,7 @@ Future<void> _generateAndWriteBindings({
 
   final bindings = await generateBindings(packageRoot, librarySubDir,
       considerAll: considerAll, idlFile: idlFile);
+
   for (var entry in bindings.entries) {
     final libraryPath = entry.key;
     final library = entry.value;
