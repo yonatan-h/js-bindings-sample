@@ -44,13 +44,12 @@ $_usage''');
   assert(p.fromUri(Platform.script).endsWith(_thisScript.toFilePath()));
 
   // Run `npm install` or `npm update` as needed.
-  //TODO: uncomment
-  // final update = argResult['update'] as bool;
-  // await _runProc(
-  //   'npm',
-  //   [update ? 'update' : 'install'],
-  //   workingDirectory: _bindingsGeneratorPath,
-  // );
+  final update = argResult['update'] as bool;
+  await _runProc(
+    'npm',
+    [update ? 'update' : 'install'],
+    workingDirectory: _bindingsGeneratorPath,
+  );
 
   // Compute JS type supertypes for union calculation in translator.
   await _generateJsTypeSupertypes();

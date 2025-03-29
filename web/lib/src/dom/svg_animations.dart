@@ -121,8 +121,12 @@ extension type SVGAnimationElement._(JSObject _)
   /// element is being animated (for example, because the `href` attribute
   /// specifies an unknown element), the value returned is `null`.
   external SVGElement? get targetElement;
+  external EventHandler get onbegin;
+  external set onbegin(EventHandler value);
   external EventHandler get onend;
   external set onend(EventHandler value);
+  external EventHandler get onrepeat;
+  external set onrepeat(EventHandler value);
 
   /// The **`requiredExtensions`** read-only property of the
   /// [SVGAnimationElement] interface reflects the `requiredExtensions`

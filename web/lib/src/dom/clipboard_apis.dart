@@ -18,6 +18,7 @@ import 'dart:js_interop';
 import 'dom.dart';
 import 'fileapi.dart';
 import 'html.dart';
+import 'permissions.dart';
 
 typedef ClipboardItems = JSArray<ClipboardItem>;
 typedef PresentationStyle = String;
@@ -183,4 +184,14 @@ extension type ClipboardUnsanitizedFormats._(JSObject _) implements JSObject {
 
   external JSArray<JSString> get unsanitized;
   external set unsanitized(JSArray<JSString> value);
+}
+extension type ClipboardPermissionDescriptor._(JSObject _)
+    implements PermissionDescriptor, JSObject {
+  external factory ClipboardPermissionDescriptor({
+    required String name,
+    bool allowWithoutGesture,
+  });
+
+  external bool get allowWithoutGesture;
+  external set allowWithoutGesture(bool value);
 }

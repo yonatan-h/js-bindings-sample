@@ -737,12 +737,16 @@ class Translator {
         // this method should already check for this.
         throw ArgumentError('$shortName.idl not found');
       } else if (library.interfacelikes.isEmpty) {
-        //Incase users input IDL files such as beacon.idl, compat.idl, etc
+        //Incase users input IDL files such as beacon.idl, compat.idl, etc (as of 2025-03-29)
         // that have no bindable elements
-        throw ArgumentError('$shortName.idl has no interfacelikes'
+        throw ArgumentError('$shortName.idl has no interfacelikes '
             'ie. interfaces, namespaces, nor dictionaries to emit bindings for ');
-      } else if (_usedTypes.isEmpty && !browserCompatData.generateAll) {
-        // Incase the idl file only contains experimental APIs
+      }
+
+      _addInterfacesAndNamespacesFor(library);
+
+      if (_usedTypes.isEmpty && !browserCompatData.generateAll) {
+        // Incase the idl file only contains experimental APIs such as observable.idl (as of 2025-03-29)
         final isStable = library.interfacelikes.every((interfaceLike) {
           final isSupported =
               browserCompatData.shouldGenerateInterface(interfaceLike.name);
@@ -766,8 +770,6 @@ class Translator {
         throw Exception(
             'Failed to generate bindings for "$shortName.idl" (unknown reason).');
       }
-
-      _addInterfacesAndNamespacesFor(library);
     }
   }
 

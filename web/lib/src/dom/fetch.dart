@@ -339,6 +339,7 @@ extension type Request._(JSObject _) implements JSObject {
   /// It is also available in
   /// [service workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API).
   external bool get keepalive;
+  external bool get isReloadNavigation;
 
   /// The **`isHistoryNavigation`** read-only property of the [Request]
   /// interface is a boolean indicating whether the request is a history
@@ -353,6 +354,8 @@ extension type Request._(JSObject _) implements JSObject {
   /// The read-only **`signal`** property of the [Request] interface returns the
   /// [AbortSignal] associated with the request.
   external AbortSignal get signal;
+  external RequestDuplex get duplex;
+  external IPAddressSpace get targetAddressSpace;
 
   /// The **`body`** read-only property of the [Request]
   /// interface contains a [ReadableStream] with the body contents

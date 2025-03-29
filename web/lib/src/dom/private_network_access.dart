@@ -15,4 +15,16 @@ library;
 
 import 'dart:js_interop';
 
+import 'permissions.dart';
+
 typedef IPAddressSpace = String;
+extension type PrivateNetworkAccessPermissionDescriptor._(JSObject _)
+    implements PermissionDescriptor, JSObject {
+  external factory PrivateNetworkAccessPermissionDescriptor({
+    required String name,
+    String id,
+  });
+
+  external String get id;
+  external set id(String value);
+}

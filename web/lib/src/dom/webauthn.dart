@@ -104,6 +104,52 @@ extension type PublicKeyCredential._(JSObject _)
   external static PublicKeyCredentialRequestOptions parseRequestOptionsFromJSON(
       PublicKeyCredentialRequestOptionsJSON options);
 
+  /// The **`signalUnknownCredential()`** static method of the
+  /// [PublicKeyCredential] interface signals to the authenticator that a
+  /// [credential ID](https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialRequestOptions#id)
+  /// was not recognized by the
+  /// [relying party](https://en.wikipedia.org/wiki/Relying_party) (RP) server.
+  ///
+  /// This allows the authenticator to remove credentials that are not allowed
+  /// by the RP, such as those for deleted accounts, or accounts that were
+  /// created and stored on the authenticator but not properly updated on the
+  /// server. Generally the method is called after sign in fails because the
+  /// account details were not available to the RP. It can be used even when the
+  /// current user is not authenticated because it does not expose sensitive
+  /// information.
+  external static JSPromise<JSAny?> signalUnknownCredential(
+      UnknownCredentialOptions options);
+
+  /// The **`signalAllAcceptedCredentials()`** static method of the
+  /// [PublicKeyCredential] interface signals to the authenticator all of the
+  /// valid
+  /// [credential IDs](https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialRequestOptions#id)
+  /// that the [relying party](https://en.wikipedia.org/wiki/Relying_party) (RP)
+  /// server still holds for a particular user.
+  ///
+  /// This allows the authenticator to update credential information, removing
+  /// all credentials that are no longer recognized by the RP, such as those for
+  /// deleted accounts. The method should be called each time a user
+  /// authenticates with the RP.
+  ///
+  /// `signalAllAcceptedCredentials()` should _only_ be called when the current
+  /// user is authenticated — after sign up or sign-in, or when the user deletes
+  /// a credential — as it exposes sensitive information belonging to the user.
+  external static JSPromise<JSAny?> signalAllAcceptedCredentials(
+      AllAcceptedCredentialsOptions options);
+
+  /// The **`signalCurrentUserDetails()`** static method of the
+  /// [PublicKeyCredential] interface signals to the authenticator that a
+  /// particular user has updated their user name and/or display name on the
+  /// [relying party](https://en.wikipedia.org/wiki/Relying_party) (RP) server.
+  ///
+  /// This allows the authenticator to update user account details, to make sure
+  /// they stay in sync with those held by the RP. It should only be used when
+  /// the current user is authenticated — after sign in, or when they change the
+  /// metadata associated with their credentials on the RP web app.
+  external static JSPromise<JSAny?> signalCurrentUserDetails(
+      CurrentUserDetailsOptions options);
+
   /// The **`getClientExtensionResults()`** method of the
   /// [PublicKeyCredential] interface returns a map between the identifiers of
   /// extensions requested during credential creation or authentication, and
@@ -199,6 +245,100 @@ extension type PublicKeyCredential._(JSObject _)
   /// category of authenticator used during the associated
   /// [CredentialsContainer.create] or [CredentialsContainer.get] call.
   external String? get authenticatorAttachment;
+}
+extension type RegistrationResponseJSON._(JSObject _) implements JSObject {
+  external factory RegistrationResponseJSON({
+    required String id,
+    required Base64URLString rawId,
+    required AuthenticatorAttestationResponseJSON response,
+    String authenticatorAttachment,
+    required AuthenticationExtensionsClientOutputsJSON clientExtensionResults,
+    required String type,
+  });
+
+  external String get id;
+  external set id(String value);
+  external Base64URLString get rawId;
+  external set rawId(Base64URLString value);
+  external AuthenticatorAttestationResponseJSON get response;
+  external set response(AuthenticatorAttestationResponseJSON value);
+  external String get authenticatorAttachment;
+  external set authenticatorAttachment(String value);
+  external AuthenticationExtensionsClientOutputsJSON get clientExtensionResults;
+  external set clientExtensionResults(
+      AuthenticationExtensionsClientOutputsJSON value);
+  external String get type;
+  external set type(String value);
+}
+extension type AuthenticatorAttestationResponseJSON._(JSObject _)
+    implements JSObject {
+  external factory AuthenticatorAttestationResponseJSON({
+    required Base64URLString clientDataJSON,
+    required Base64URLString authenticatorData,
+    required JSArray<JSString> transports,
+    Base64URLString publicKey,
+    required COSEAlgorithmIdentifier publicKeyAlgorithm,
+    required Base64URLString attestationObject,
+  });
+
+  external Base64URLString get clientDataJSON;
+  external set clientDataJSON(Base64URLString value);
+  external Base64URLString get authenticatorData;
+  external set authenticatorData(Base64URLString value);
+  external JSArray<JSString> get transports;
+  external set transports(JSArray<JSString> value);
+  external Base64URLString get publicKey;
+  external set publicKey(Base64URLString value);
+  external COSEAlgorithmIdentifier get publicKeyAlgorithm;
+  external set publicKeyAlgorithm(COSEAlgorithmIdentifier value);
+  external Base64URLString get attestationObject;
+  external set attestationObject(Base64URLString value);
+}
+extension type AuthenticationResponseJSON._(JSObject _) implements JSObject {
+  external factory AuthenticationResponseJSON({
+    required String id,
+    required Base64URLString rawId,
+    required AuthenticatorAssertionResponseJSON response,
+    String authenticatorAttachment,
+    required AuthenticationExtensionsClientOutputsJSON clientExtensionResults,
+    required String type,
+  });
+
+  external String get id;
+  external set id(String value);
+  external Base64URLString get rawId;
+  external set rawId(Base64URLString value);
+  external AuthenticatorAssertionResponseJSON get response;
+  external set response(AuthenticatorAssertionResponseJSON value);
+  external String get authenticatorAttachment;
+  external set authenticatorAttachment(String value);
+  external AuthenticationExtensionsClientOutputsJSON get clientExtensionResults;
+  external set clientExtensionResults(
+      AuthenticationExtensionsClientOutputsJSON value);
+  external String get type;
+  external set type(String value);
+}
+extension type AuthenticatorAssertionResponseJSON._(JSObject _)
+    implements JSObject {
+  external factory AuthenticatorAssertionResponseJSON({
+    required Base64URLString clientDataJSON,
+    required Base64URLString authenticatorData,
+    required Base64URLString signature,
+    Base64URLString userHandle,
+  });
+
+  external Base64URLString get clientDataJSON;
+  external set clientDataJSON(Base64URLString value);
+  external Base64URLString get authenticatorData;
+  external set authenticatorData(Base64URLString value);
+  external Base64URLString get signature;
+  external set signature(Base64URLString value);
+  external Base64URLString get userHandle;
+  external set userHandle(Base64URLString value);
+}
+extension type AuthenticationExtensionsClientOutputsJSON._(JSObject _)
+    implements JSObject {
+  AuthenticationExtensionsClientOutputsJSON() : _ = JSObject();
 }
 extension type PublicKeyCredentialCreationOptionsJSON._(JSObject _)
     implements JSObject {
@@ -301,6 +441,48 @@ extension type PublicKeyCredentialRequestOptionsJSON._(JSObject _)
   external set hints(JSArray<JSString> value);
   external AuthenticationExtensionsClientInputsJSON get extensions;
   external set extensions(AuthenticationExtensionsClientInputsJSON value);
+}
+extension type UnknownCredentialOptions._(JSObject _) implements JSObject {
+  external factory UnknownCredentialOptions({
+    required String rpId,
+    required Base64URLString credentialId,
+  });
+
+  external String get rpId;
+  external set rpId(String value);
+  external Base64URLString get credentialId;
+  external set credentialId(Base64URLString value);
+}
+extension type AllAcceptedCredentialsOptions._(JSObject _) implements JSObject {
+  external factory AllAcceptedCredentialsOptions({
+    required String rpId,
+    required Base64URLString userId,
+    required JSArray<JSString> allAcceptedCredentialIds,
+  });
+
+  external String get rpId;
+  external set rpId(String value);
+  external Base64URLString get userId;
+  external set userId(Base64URLString value);
+  external JSArray<JSString> get allAcceptedCredentialIds;
+  external set allAcceptedCredentialIds(JSArray<JSString> value);
+}
+extension type CurrentUserDetailsOptions._(JSObject _) implements JSObject {
+  external factory CurrentUserDetailsOptions({
+    required String rpId,
+    required Base64URLString userId,
+    required String name,
+    required String displayName,
+  });
+
+  external String get rpId;
+  external set rpId(String value);
+  external Base64URLString get userId;
+  external set userId(Base64URLString value);
+  external String get name;
+  external set name(String value);
+  external String get displayName;
+  external set displayName(String value);
 }
 
 /// The **`AuthenticatorResponse`** interface of the
@@ -685,6 +867,37 @@ extension type AuthenticationExtensionsClientOutputs._(JSObject _)
   external set prf(AuthenticationExtensionsPRFOutputs value);
   external AuthenticationExtensionsLargeBlobOutputs get largeBlob;
   external set largeBlob(AuthenticationExtensionsLargeBlobOutputs value);
+}
+extension type CollectedClientData._(JSObject _) implements JSObject {
+  external factory CollectedClientData({
+    required String type,
+    required String challenge,
+    required String origin,
+    bool crossOrigin,
+    String topOrigin,
+  });
+
+  external String get type;
+  external set type(String value);
+  external String get challenge;
+  external set challenge(String value);
+  external String get origin;
+  external set origin(String value);
+  external bool get crossOrigin;
+  external set crossOrigin(bool value);
+  external String get topOrigin;
+  external set topOrigin(String value);
+}
+extension type TokenBinding._(JSObject _) implements JSObject {
+  external factory TokenBinding({
+    required String status,
+    String id,
+  });
+
+  external String get status;
+  external set status(String value);
+  external String get id;
+  external set id(String value);
 }
 extension type PublicKeyCredentialDescriptor._(JSObject _) implements JSObject {
   external factory PublicKeyCredentialDescriptor({
