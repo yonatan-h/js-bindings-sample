@@ -273,11 +273,17 @@ final _parser = ArgParser()
   ..addFlag('update', abbr: 'u', help: 'Update npm dependencies')
   ..addFlag('compile', defaultsTo: true)
   ..addFlag('help', negatable: false)
-  ..addFlag('generate-all',
+
+// Replaces 'generate-all' to emphasise that it no longer automatically
+// generates bindings for all non-standard or experimental APIs.Now that
+// specific IDL files can be targeted, non-standard/experimental bindings
+// are only created when needed.
+  ..addFlag('consider-all',
       negatable: false,
-      help: 'Generate bindings for all IDL definitions, including experimental '
-          'and non-standard APIs.')
+      help:
+          'Allow non-standard/experimental api definitions to be also be used when generating bindings')
   ..addOption('idl',
       abbr: 'i',
-      help: 'Generate bindings for an IDL file and its dependencies',
+      help:
+          'Generate bindings for an IDL file and its dependencies. Choose file name from https://github.com/w3c/webref/tree/main/ed/idl',
       valueHelp: 'file.idl');

@@ -7,6 +7,7 @@ import 'dart:js_interop';
 import 'package:args/args.dart';
 import 'package:code_builder/code_builder.dart' as code;
 import 'package:dart_style/dart_style.dart';
+import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 
 import 'filesystem_api.dart';
@@ -26,10 +27,17 @@ void main(List<String> args) async {
   }
   final ArgResults argResult;
   argResult = _parser.parse(args);
+
+  final idlFile = argResult['idl'] as String?;
+  if (idlFile != null && p.extension(idlFile) != '.idl') {
+    throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
+  }
+
   await _generateAndWriteBindings(
     outputDirectory: argResult['output-directory'] as String,
     generateAll: argResult['generate-all'] as bool,
     languageVersion: Version.parse(languageVersionString),
+    idlFile: idlFile,
   );
 }
 
@@ -37,18 +45,20 @@ Future<void> _generateAndWriteBindings({
   required String outputDirectory,
   required bool generateAll,
   required Version languageVersion,
+  String? idlFile,
 }) async {
-  const librarySubDir = 'dom';
+  final librarySubDir = idlFile == null ? 'dom' : 'specific_bindings';
 
   ensureDirectoryExists('$outputDirectory/$librarySubDir');
 
   final bindings = await generateBindings(packageRoot, librarySubDir,
-      generateAll: generateAll);
+      generateAll: generateAll, idlFile: idlFile);
   for (var entry in bindings.entries) {
     final libraryPath = entry.key;
     final library = entry.value;
 
     final contents = _emitLibrary(library, languageVersion).toJS;
+
     fs.writeFileSync('$outputDirectory/$libraryPath'.toJS, contents);
   }
 }
@@ -71,4 +81,8 @@ final _parser = ArgParser()
   ..addFlag('generate-all',
       negatable: false,
       help: 'Generate bindings for all IDL definitions, including experimental '
-          'and non-standard APIs.');
+          'and non-standard APIs.')
+  ..addOption('idl',
+      abbr: 'i',
+      help: 'Generate bindings for an IDL file and its dependencies',
+      valueHelp: 'file.idl');

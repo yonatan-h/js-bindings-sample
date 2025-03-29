@@ -3,6 +3,9 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
+import 'package:path/path.dart' as p;
 
 import 'translator.dart';
 import 'util.dart';
@@ -70,19 +73,34 @@ Future<Map<String, Set<String>>> _generateElementTagMap() async {
 
 Future<TranslationResult> generateBindings(
     String packageRoot, String librarySubDir,
-    {required bool generateAll}) async {
+    {required bool generateAll, String? idlFile}) async {
   final cssStyleDeclarations = await _generateCSSStyleDeclarations();
   final elementHTMLMap = await _generateElementTagMap();
   final translator = Translator(
       packageRoot, librarySubDir, cssStyleDeclarations, elementHTMLMap,
       generateAll: generateAll);
-  final array = objectEntries(await idl.parseAll().toDart);
+  final allIdl = await idl.parseAll().toDart;
+
+  if (idlFile != null) {
+    final targetAst = allIdl[p.basenameWithoutExtension(idlFile)];
+    if (targetAst == null) {
+      throw ArgumentError("IDL file '$idlFile' could'nt be found in webref");
+    }
+  }
+
+  final array = objectEntries(allIdl);
   for (var i = 0; i < array.length; i++) {
     final entry = array[i] as JSArray<JSAny?>;
     final shortname = (entry[0] as JSString).toDart;
     final ast = entry[1] as JSArray<webidl.Node>;
     translator.collect(shortname, ast);
   }
-  translator.addInterfacesAndNamespaces();
+
+  if (idlFile == null) {
+    translator.addInterfacesAndNamespaces();
+  } else {
+    translator.addInterfacesAndNamespaces(
+        shortName: p.basenameWithoutExtension(idlFile));
+  }
   return translator.translate();
 }

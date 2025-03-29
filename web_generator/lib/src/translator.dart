@@ -701,25 +701,40 @@ class Translator {
   /// [BrowserCompatData.generateAll] is true and are otherwise handled by
   /// [markTypeAsUsed] because they don't have any compat data and are emitted
   /// only if used.
-  void addInterfacesAndNamespaces() {
-    for (final library in _libraries.values) {
-      for (final interfacelike in library.interfacelikes) {
-        final name = interfacelike.name;
-        switch (interfacelike.type) {
-          case 'interface':
-          case 'namespace':
+  //Todo: update comment
+
+  void _addInterfacesAndNamespacesFor(_Library library) {
+    for (final interfacelike in library.interfacelikes) {
+      final name = interfacelike.name;
+      switch (interfacelike.type) {
+        case 'interface':
+        case 'namespace':
+          markTypeAsUsed(name);
+          break;
+        case 'dictionary':
+          if (Translator.instance!.browserCompatData.generateAll) {
             markTypeAsUsed(name);
-            break;
-          case 'dictionary':
-            if (Translator.instance!.browserCompatData.generateAll) {
-              markTypeAsUsed(name);
-            }
-            break;
-          default:
-            throw Exception(
-                'Unexpected interfacelike type ${interfacelike.type}');
-        }
+          }
+          break;
+        default:
+          throw Exception(
+              'Unexpected interfacelike type ${interfacelike.type}');
       }
+    }
+  }
+
+  void addInterfacesAndNamespaces({String? shortName}) {
+    if (shortName == null) {
+      for (final library in _libraries.values) {
+        _addInterfacesAndNamespacesFor(library);
+      }
+    } else {
+      final libraryPath = _generateLibraryPath(shortName: shortName);
+      final library = _libraries[libraryPath];
+      if (library == null) {
+        throw Exception('Library $libraryPath not found');
+      }
+      _addInterfacesAndNamespacesFor(library);
     }
   }
 
@@ -812,8 +827,12 @@ class Translator {
     }
   }
 
+  String _generateLibraryPath({required String shortName}) {
+    return '$_librarySubDir/${shortName.kebabToSnake}.dart';
+  }
+
   void collect(String shortName, JSArray<idl.Node> ast) {
-    final libraryPath = '$_librarySubDir/${shortName.kebabToSnake}.dart';
+    final libraryPath = _generateLibraryPath(shortName: shortName);
     assert(!_libraries.containsKey(libraryPath));
 
     final library = _Library(shortName, '$packageRoot/$libraryPath');
