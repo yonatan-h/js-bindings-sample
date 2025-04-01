@@ -49,6 +49,8 @@ Future<void> _generateAndWriteBindings({
   required Version languageVersion,
   String? idlFile,
 }) async {
+  // Choose output directory based on if we are generating bindings for an
+  // specific IDL file or not.
   final librarySubDir = idlFile == null ? 'dom' : 'specific_bindings';
 
   ensureDirectoryExists('$outputDirectory/$librarySubDir');
