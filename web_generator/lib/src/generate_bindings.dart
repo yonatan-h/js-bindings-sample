@@ -72,7 +72,7 @@ Future<Map<String, Set<String>>> _generateElementTagMap() async {
 }
 
 Future<TranslationResult> generateBindings(
-    String packageRoot, String librarySubDir,
+    String packageRoot, String librarySubDir, String rootImportFile,
     {required bool considerAll, String? idlFile}) async {
   final cssStyleDeclarations = await _generateCSSStyleDeclarations();
   final elementHTMLMap = await _generateElementTagMap();
@@ -106,6 +106,5 @@ Future<TranslationResult> generateBindings(
     translator.addInterfacesAndNamespaces(
         shortName: p.basenameWithoutExtension(idlFile));
   }
-  return translator
-      .translate(idlFile == null ? 'dom.dart' : 'specific_bindings.dart');
+  return translator.translate(rootImportFile);
 }

@@ -17,3 +17,4 @@ import 'dart:js_interop';
 
 typedef ArrayBufferView = JSObject;
 typedef BufferSource = JSObject;
+typedef AllowSharedBufferSource = JSObject;

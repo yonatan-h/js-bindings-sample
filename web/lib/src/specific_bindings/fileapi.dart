@@ -100,3 +100,70 @@ extension type BlobPropertyBag._(JSObject _) implements JSObject {
   external EndingType get endings;
   external set endings(EndingType value);
 }
+
+/// The **`File`** interface provides information about files and allows
+/// JavaScript in a web page to access their content.
+///
+/// `File` objects are generally retrieved from a [FileList] object returned as
+/// a result of a user selecting files using the `input` element, or from a drag
+/// and drop operation's [DataTransfer] object.
+///
+/// A `File` object is a specific kind of [Blob], and can be used in any context
+/// that a Blob can. In particular, the following APIs accept both `Blob`s and
+/// `File` objects:
+///
+/// - [FileReader]
+/// - [URL.createObjectURL_static]
+/// - [Window.createImageBitmap] and [WorkerGlobalScope.createImageBitmap]
+/// - the
+///   [`body`](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit#body)
+///   option to [Window.fetch]
+/// - [XMLHttpRequest.send]
+///
+/// See
+/// [Using files from web applications](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications)
+/// for more information and examples.
+///
+/// ---
+///
+/// API documentation sourced from
+/// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/File).
+extension type File._(JSObject _) implements Blob, JSObject {
+  external factory File(
+    JSArray<BlobPart> fileBits,
+    String fileName, [
+    FilePropertyBag options,
+  ]);
+
+  /// The **`name`** read-only property of the [File] interface returns the name
+  /// of the file represented by a [File] object. For security
+  /// reasons, the path is excluded from this property.
+  external String get name;
+
+  /// The **`lastModified`** read-only property of the [File] interface provides
+  /// the
+  /// last modified date of the file as the number of milliseconds since the
+  /// Unix
+  /// epoch (January 1, 1970 at midnight). Files without a known last modified
+  /// date return the
+  /// current date.
+  external int get lastModified;
+
+  /// The **`webkitRelativePath`** read-only property of the [File] interface
+  /// contains a string which specifies the file's path relative to the
+  /// directory selected by the user in an `input` element with its
+  /// [`webkitdirectory`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#webkitdirectory)
+  /// attribute set.
+  external String get webkitRelativePath;
+}
+extension type FilePropertyBag._(JSObject _)
+    implements BlobPropertyBag, JSObject {
+  external factory FilePropertyBag({
+    String type,
+    EndingType endings,
+    int lastModified,
+  });
+
+  external int get lastModified;
+  external set lastModified(int value);
+}

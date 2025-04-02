@@ -40,22 +40,23 @@ void main(List<String> args) async {
     considerAll: argResult['consider-all'] as bool,
     languageVersion: Version.parse(languageVersionString),
     idlFile: idlFile,
+    outputSubDirectory: idlFile == null ? 'dom' : 'specific_bindings',
+    rootImportFile: idlFile == null ? 'dom.dart' : 'specific_bindings.dart',
   );
 }
 
 Future<void> _generateAndWriteBindings({
   required String outputDirectory,
+  required String outputSubDirectory,
   required bool considerAll,
   required Version languageVersion,
+  required String rootImportFile,
   String? idlFile,
 }) async {
-  // Choose output directory based on if we are generating bindings for an
-  // specific IDL file or not.
-  final librarySubDir = idlFile == null ? 'dom' : 'specific_bindings';
+  ensureDirectoryExists('$outputDirectory/$outputSubDirectory');
 
-  ensureDirectoryExists('$outputDirectory/$librarySubDir');
-
-  final bindings = await generateBindings(packageRoot, librarySubDir,
+  final bindings = await generateBindings(
+      packageRoot, outputSubDirectory, rootImportFile,
       considerAll: considerAll, idlFile: idlFile);
 
   for (var entry in bindings.entries) {
