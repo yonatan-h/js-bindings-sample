@@ -23,10 +23,8 @@ import 'mst_content_hint.dart';
 import 'webcryptoapi.dart';
 import 'webidl.dart';
 import 'webrtc_encoded_transform.dart';
-import 'webrtc_ice.dart';
 import 'webrtc_identity.dart';
 import 'webrtc_priority.dart';
-import 'webrtc_stats.dart';
 import 'websockets.dart';
 
 typedef RTCPeerConnectionErrorCallback = JSFunction;
@@ -42,7 +40,6 @@ typedef RTCSdpType = String;
 typedef RTCIceProtocol = String;
 typedef RTCIceTcpCandidateType = String;
 typedef RTCIceCandidateType = String;
-typedef RTCIceServerTransportProtocol = String;
 typedef RTCRtpTransceiverDirection = String;
 typedef RTCDtlsTransportState = String;
 typedef RTCIceGathererState = String;
@@ -635,9 +632,8 @@ extension type RTCPeerConnection._(JSObject _)
   /// Once this promise resolves successfully, the resulting identity is the
   /// **target peer identity** and cannot change for the duration of the
   /// connection.
-  external JSPromise<RTCIdentityAssertion> get peerIdentity;
+  external JSPromise<JSObject> get peerIdentity;
   external String? get idpLoginUrl;
-  external String? get idpErrorInfo;
   external EventHandler get ontrack;
   external set ontrack(EventHandler value);
 
@@ -928,8 +924,6 @@ extension type RTCIceCandidate._(JSObject _) implements JSObject {
   /// Note that 24 bits of the username fragment are required to be randomized
   /// by the browser. See [Randomization](#randomization) below for details.
   external String? get usernameFragment;
-  external RTCIceServerTransportProtocol? get relayProtocol;
-  external String? get url;
 }
 extension type RTCIceCandidateInit._(JSObject _) implements JSObject {
   external factory RTCIceCandidateInit({
@@ -1036,12 +1030,6 @@ extension type RTCPeerConnectionIceErrorEventInit._(JSObject _)
   external set errorCode(int value);
   external String get errorText;
   external set errorText(String value);
-}
-extension type RTCCertificateExpiration._(JSObject _) implements JSObject {
-  external factory RTCCertificateExpiration({int expires});
-
-  external int get expires;
-  external set expires(int value);
 }
 
 /// The **`RTCCertificate`** interface of the
@@ -1169,7 +1157,6 @@ extension type RTCRtpSender._(JSObject _) implements JSObject {
   /// on the [RTCPeerConnection] which owns the sender, returning a `Promise`
   /// which is fulfilled when the results are available.
   external JSPromise<RTCStatsReport> getStats();
-  external JSPromise<JSAny?> generateKeyFrame([JSArray<JSString> rids]);
 
   /// The **`track`** read-only property of
   /// the [RTCRtpSender] interface returns the [MediaStreamTrack]
@@ -1656,8 +1643,6 @@ extension type RTCDtlsFingerprint._(JSObject _) implements JSObject {
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCIceTransport).
 extension type RTCIceTransport._(JSObject _) implements EventTarget, JSObject {
-  external factory RTCIceTransport();
-
   /// The **`getLocalCandidates()`** method of the [RTCIceTransport] interface
   /// returns an array of [RTCIceCandidate] objects, one for each of the
   /// candidates that have been gathered by the local device during the current
@@ -1683,7 +1668,7 @@ extension type RTCIceTransport._(JSObject _) implements EventTarget, JSObject {
   /// interface returns an [RTCIceCandidatePair] object containing the current
   /// best-choice pair of  candidates describing the configuration of the
   /// endpoints of the transport.
-  external RTCIceCandidatePair? getSelectedCandidatePair();
+  external JSObject? getSelectedCandidatePair();
 
   /// The **`getLocalParameters()`** method of the [RTCIceTransport] interface
   /// returns an [RTCIceParameters] object that provides information uniquely
@@ -1702,13 +1687,6 @@ extension type RTCIceTransport._(JSObject _) implements EventTarget, JSObject {
   /// delivered to the transport when the client calls
   /// [RTCPeerConnection.setRemoteDescription].
   external RTCIceParameters? getRemoteParameters();
-  external void gather([RTCIceGatherOptions options]);
-  external void start([
-    RTCIceParameters remoteParameters,
-    RTCIceRole role,
-  ]);
-  external void stop();
-  external void addRemoteCandidate([RTCIceCandidateInit remoteCandidate]);
 
   /// The **`role`** read-only property of the [RTCIceTransport] interface
   /// indicates which  role the transport is fulfilling: that of the controlling
@@ -1717,10 +1695,6 @@ extension type RTCIceTransport._(JSObject _) implements EventTarget, JSObject {
   /// You can learn more about ICE roles in
   /// [Choosing a candidate pair](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity#choosing_a_candidate_pair).
   external RTCIceRole get role;
-
-  /// The **`component`** read-only property of the [RTCIceTransport] interface
-  /// specifies whether the object is serving to transport  or .
-  external RTCIceComponent get component;
 
   /// The **`state`** read-only property of the [RTCIceTransport] interface
   /// returns the current state of the ICE transport, so you can determine the
@@ -1795,29 +1769,6 @@ extension type RTCIceParameters._(JSObject _) implements JSObject {
   external set password(String value);
   external bool get iceLite;
   external set iceLite(bool value);
-}
-
-/// The **`RTCIceCandidatePair`** dictionary describes a pair of ICE candidates
-/// which together comprise a description of a viable connection between two
-/// WebRTC endpoints. It is used as the return value from
-/// [RTCIceTransport.getSelectedCandidatePair] to identify the
-/// currently-selected candidate pair identified by the ICE agent.
-///
-/// ---
-///
-/// API documentation sourced from
-/// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCIceCandidatePair).
-extension type RTCIceCandidatePair._(JSObject _) implements JSObject {
-  /// The **`local`** property of the **[RTCIceCandidatePair]** dictionary
-  /// specifies the [RTCIceCandidate] which describes the configuration of the
-  /// local end of a viable WebRTC connection.
-  external RTCIceCandidate get local;
-
-  /// The **`remote`** property of the
-  /// **[RTCIceCandidatePair]** dictionary specifies the
-  /// [RTCIceCandidate] describing the configuration of the remote end of a
-  /// viable WebRTC connection.
-  external RTCIceCandidate get remote;
 }
 
 /// The
@@ -2193,7 +2144,6 @@ extension type RTCDataChannel._(JSObject _) implements EventTarget, JSObject {
   /// the type specified by the `binaryType`.
   external BinaryType get binaryType;
   external set binaryType(BinaryType value);
-  external RTCPriorityType get priority;
 }
 extension type RTCDataChannelInit._(JSObject _) implements JSObject {
   external factory RTCDataChannelInit({
@@ -2365,20 +2315,6 @@ extension type RTCDTMFToneChangeEventInit._(JSObject _)
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/RTCStatsReport).
 extension type RTCStatsReport._(JSObject _) implements JSObject {}
-extension type RTCStats._(JSObject _) implements JSObject {
-  external factory RTCStats({
-    required DOMHighResTimeStamp timestamp,
-    required RTCStatsType type,
-    required String id,
-  });
-
-  external double get timestamp;
-  external set timestamp(DOMHighResTimeStamp value);
-  external RTCStatsType get type;
-  external set type(RTCStatsType value);
-  external String get id;
-  external set id(String value);
-}
 
 /// The **`RTCError`** interface describes an error which has occurred while
 /// handling

@@ -17,7 +17,6 @@ import 'dart:js_interop';
 
 import 'dom.dart';
 import 'html.dart';
-import 'input_device_capabilities.dart';
 import 'uievents.dart';
 
 extension type PointerEventInit._(JSObject _)
@@ -28,7 +27,7 @@ extension type PointerEventInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     bool ctrlKey,
     bool shiftKey,
@@ -325,18 +324,4 @@ extension type PointerEvent._(JSObject _) implements MouseEvent, JSObject {
   /// for more information about pointer, mouse and touch
   /// interaction).
   external bool get isPrimary;
-
-  /// The **`persistentDeviceId`** read-only property of the
-  /// [PointerEvent] interface is a unique identifier for the pointing device
-  /// generating the `PointerEvent`. This provides a secure, reliable way to
-  /// identify multiple pointing devices (such as pens) interacting with the
-  /// screen simultaneously.
-  ///
-  /// A `persistentDeviceId` persists for the lifetime of a browsing session. To
-  /// avoid the risk of fingerprinting/tracking, pointing devices are assigned a
-  /// new `persistentDeviceId` at the start of each session.
-  ///
-  /// Pointer events whose generating device could not be identified are
-  /// assigned a `persistentDeviceId` value of `0`.
-  external int get persistentDeviceId;
 }

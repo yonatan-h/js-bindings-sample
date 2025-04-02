@@ -17,7 +17,6 @@ import 'dart:js_interop';
 
 import 'dom.dart';
 import 'html.dart';
-import 'input_device_capabilities.dart';
 
 /// The **`UIEvent`** interface represents simple user interface events. It is
 /// part of the
@@ -83,35 +82,6 @@ extension type UIEvent._(JSObject _) implements Event, JSObject {
   /// For all other [UIEvent] objects, `UIEvent.detail` is always zero.
   external int get detail;
 
-  /// The **`sourceCapabilities`** read-only property of the [UIEvent] interface
-  /// returns
-  /// an instance of the [InputDeviceCapabilities] interface which provides
-  /// information about the physical device responsible for generating a touch
-  /// event. If no
-  /// input device was responsible for the event, it returns `null`.
-  ///
-  /// When a single user interaction with an input device generates a series of
-  /// different
-  /// input events, the `sourceCapabilities` property for all of them will point
-  /// to
-  /// the same instance of `InputDeviceCapabilities`. For example, when a user
-  /// lifts their finger off of a touchscreen, several UIEvents may be generated
-  /// including
-  /// `touchend`, `mousedown`, `click`, and
-  /// `focus`. All of these events must have the same
-  /// `sourceCapabilities` representing the touchscreen.
-  ///
-  /// A device is considered "responsible" for an event only when that
-  /// interaction is part of
-  /// the abstraction provided by the web platform. For example, many user
-  /// agents allow a
-  /// window to be resized with a mouse or a keyboard, but this detail is not
-  /// exposed to the
-  /// web platform in any way, and so the sourceCapabilities of a resize event
-  /// will typically
-  /// be null.
-  external InputDeviceCapabilities? get sourceCapabilities;
-
   /// The **`UIEvent.which`** read-only property of the [UIEvent] interface
   /// returns a number that indicates which button was pressed on the mouse, or
   /// the numeric `keyCode` or the character code (`charCode`) of the key
@@ -125,7 +95,7 @@ extension type UIEventInit._(JSObject _) implements EventInit, JSObject {
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
   });
 
@@ -133,8 +103,8 @@ extension type UIEventInit._(JSObject _) implements EventInit, JSObject {
   external set view(Window? value);
   external int get detail;
   external set detail(int value);
-  external InputDeviceCapabilities? get sourceCapabilities;
-  external set sourceCapabilities(InputDeviceCapabilities? value);
+  external JSObject? get sourceCapabilities;
+  external set sourceCapabilities(JSObject? value);
   external int get which;
   external set which(int value);
 }
@@ -204,7 +174,7 @@ extension type FocusEventInit._(JSObject _) implements UIEventInit, JSObject {
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     EventTarget? relatedTarget,
   });
@@ -310,26 +280,6 @@ extension type MouseEvent._(JSObject _) implements UIEvent, JSObject {
   /// in a mouse event with a `clientY` value of `0`, regardless of whether the
   /// page is scrolled vertically.
   external int get clientY;
-
-  /// The **`MouseEvent.layerX`** read-only property returns the
-  /// horizontal coordinate of the event relative to the current layer.
-  ///
-  /// This property takes scrolling of the page into account and returns a value
-  /// relative to
-  /// the whole of the document unless the event occurs inside a positioned
-  /// element, where the
-  /// returned value is relative to the top left of the positioned element.
-  external int get layerX;
-
-  /// The **`MouseEvent.layerY`** read-only property returns the
-  /// vertical coordinate of the event relative to the current layer.
-  ///
-  /// This property takes scrolling of the page into account, and returns a
-  /// value relative to
-  /// the whole of the document, unless the event occurs inside a positioned
-  /// element, where
-  /// the returned value is relative to the top left of the positioned element.
-  external int get layerY;
 
   /// The **`MouseEvent.ctrlKey`** read-only property is a boolean value that
   /// indicates whether the <kbd>ctrl</kbd> key was pressed or not when a given
@@ -584,7 +534,7 @@ extension type MouseEventInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     bool ctrlKey,
     bool shiftKey,
@@ -638,7 +588,7 @@ extension type EventModifierInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     bool ctrlKey,
     bool shiftKey,
@@ -757,7 +707,7 @@ extension type WheelEventInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     bool ctrlKey,
     bool shiftKey,
@@ -894,7 +844,7 @@ extension type InputEventInit._(JSObject _) implements UIEventInit, JSObject {
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     String? data,
     bool isComposing,
@@ -1199,7 +1149,7 @@ extension type KeyboardEventInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     bool ctrlKey,
     bool shiftKey,
@@ -1283,7 +1233,7 @@ extension type CompositionEventInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     String data,
   });

@@ -109,8 +109,6 @@ extension type Memory._(JSObject _) implements JSObject {
   external factory Memory(MemoryDescriptor descriptor);
 
   external int grow(int delta);
-  external JSArrayBuffer toFixedLengthBuffer();
-  external JSArrayBuffer toResizableBuffer();
   external JSArrayBuffer get buffer;
 }
 extension type TableDescriptor._(JSObject _) implements JSObject {

@@ -47,7 +47,7 @@ typedef Uint32List = JSObject;
 ///
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLQuery).
-extension type WebGLQuery._(JSObject _) implements WebGLObject, JSObject {}
+extension type WebGLQuery._(JSObject _) implements JSObject {}
 
 /// The **`WebGLSampler`** interface is part of the
 /// [WebGL 2](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) API
@@ -66,7 +66,7 @@ extension type WebGLQuery._(JSObject _) implements WebGLObject, JSObject {}
 ///
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLSampler).
-extension type WebGLSampler._(JSObject _) implements WebGLObject, JSObject {}
+extension type WebGLSampler._(JSObject _) implements JSObject {}
 
 /// The **`WebGLSync`** interface is part of the
 /// [WebGL 2](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) API
@@ -86,7 +86,7 @@ extension type WebGLSampler._(JSObject _) implements WebGLObject, JSObject {}
 ///
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLSync).
-extension type WebGLSync._(JSObject _) implements WebGLObject, JSObject {}
+extension type WebGLSync._(JSObject _) implements JSObject {}
 
 /// The **`WebGLTransformFeedback`** interface is part of the
 /// [WebGL 2](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) API
@@ -112,8 +112,7 @@ extension type WebGLSync._(JSObject _) implements WebGLObject, JSObject {}
 ///
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLTransformFeedback).
-extension type WebGLTransformFeedback._(JSObject _)
-    implements WebGLObject, JSObject {}
+extension type WebGLTransformFeedback._(JSObject _) implements JSObject {}
 
 /// The **`WebGLVertexArrayObject`** interface is part of the
 /// [WebGL 2 API](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API),
@@ -136,8 +135,7 @@ extension type WebGLTransformFeedback._(JSObject _)
 ///
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLVertexArrayObject).
-extension type WebGLVertexArrayObject._(JSObject _)
-    implements WebGLObject, JSObject {}
+extension type WebGLVertexArrayObject._(JSObject _) implements JSObject {}
 
 /// The **WebGL2RenderingContext** interface provides the OpenGL ES 3.0
 /// rendering context for the drawing surface of an HTML `canvas` element.
@@ -1289,11 +1287,6 @@ extension type WebGL2RenderingContext._(JSObject _) implements JSObject {
   external bool isContextLost();
   external JSArray<JSString>? getSupportedExtensions();
   external JSObject? getExtension(String name);
-  external void drawingBufferStorage(
-    GLenum sizedFormat,
-    int width,
-    int height,
-  );
   external void activeTexture(GLenum texture);
   external void attachShader(
     WebGLProgram program,
@@ -2676,7 +2669,6 @@ extension type WebGL2RenderingContext._(JSObject _) implements JSObject {
   external JSObject get canvas;
   external GLsizei get drawingBufferWidth;
   external GLsizei get drawingBufferHeight;
-  external GLenum get drawingBufferFormat;
 
   /// The **`WebGL2RenderingContext.drawingBufferColorSpace`** property
   /// specifies the color space of the WebGL drawing buffer. Along with the

@@ -125,14 +125,3 @@ extension type ReportingObserverOptions._(JSObject _) implements JSObject {
   external bool get buffered;
   external set buffered(bool value);
 }
-extension type GenerateTestReportParameters._(JSObject _) implements JSObject {
-  external factory GenerateTestReportParameters({
-    required String message,
-    String group,
-  });
-
-  external String get message;
-  external set message(String value);
-  external String get group;
-  external set group(String value);
-}

@@ -16,10 +16,8 @@ library;
 import 'dart:js_interop';
 
 import 'css_highlight_api.dart';
-import 'css_parser_api.dart';
 import 'css_properties_values_api.dart';
 import 'css_typed_om.dart';
-import 'html.dart';
 
 /// The **`MediaList`** interface represents the media queries of a stylesheet,
 /// e.g. those set using a `link` element's `media` attribute.
@@ -452,7 +450,7 @@ extension type CSSStyleRule._(JSObject _) implements CSSGroupingRule, JSObject {
 
   /// The read-only **`style`** property is the [CSSStyleDeclaration] interface
   /// for the declaration block of the [CSSStyleRule].
-  external CSSStyleProperties get style;
+  external JSObject get style;
 
   /// The **`styleMap`** read-only property of the
   /// [CSSStyleRule] interface returns a [StylePropertyMap] object
@@ -540,67 +538,6 @@ extension type CSSGroupingRule._(JSObject _) implements CSSRule, JSObject {
   external CSSRuleList get cssRules;
 }
 
-/// The **`CSSPageDescriptors`** interface represents a CSS declaration block
-/// for an
-/// [at-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_syntax/At-rule).
-///
-/// The interface exposes style information and various style-related methods
-/// and properties for the page.
-/// Each multi-word property has versions in camel- and snake-case.
-/// This means, for example, that you can access the `margin-top` CSS property
-/// using the syntax `style["margin-top"]` or `style.marginTop` (where `style`
-/// is a `CSSPageDescriptor`).
-///
-/// A `CSSPageDescriptors` object is accessed through the [CSSPageRule.style]
-/// property of the `CSSPageRule` interface, which can in turn be found using
-/// the [CSSStyleSheet] API.
-///
-/// ---
-///
-/// API documentation sourced from
-/// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/CSSPageDescriptors).
-extension type CSSPageDescriptors._(JSObject _)
-    implements CSSStyleDeclaration, JSObject {
-  external String get margin;
-  external set margin(String value);
-  external String get marginTop;
-  external set marginTop(String value);
-  external String get marginRight;
-  external set marginRight(String value);
-  external String get marginBottom;
-  external set marginBottom(String value);
-  external String get marginLeft;
-  external set marginLeft(String value);
-  @JS('margin-top')
-  external String get margin_top;
-  @JS('margin-top')
-  external set margin_top(String value);
-  @JS('margin-right')
-  external String get margin_right;
-  @JS('margin-right')
-  external set margin_right(String value);
-  @JS('margin-bottom')
-  external String get margin_bottom;
-  @JS('margin-bottom')
-  external set margin_bottom(String value);
-  @JS('margin-left')
-  external String get margin_left;
-  @JS('margin-left')
-  external set margin_left(String value);
-  external String get size;
-  external set size(String value);
-  external String get pageOrientation;
-  external set pageOrientation(String value);
-  @JS('page-orientation')
-  external String get page_orientation;
-  @JS('page-orientation')
-  external set page_orientation(String value);
-  external String get marks;
-  external set marks(String value);
-  external String get bleed;
-  external set bleed(String value);
-}
-
 /// **`CSSPageRule`** represents a single CSS  rule.
 ///
 /// ---
@@ -621,11 +558,7 @@ extension type CSSPageRule._(JSObject _) implements CSSGroupingRule, JSObject {
   /// [at-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_syntax/At-rule),
   /// and exposes style information and various style-related methods and
   /// properties for the page.
-  external CSSPageDescriptors get style;
-}
-extension type CSSMarginRule._(JSObject _) implements CSSRule, JSObject {
-  external String get name;
-  external CSSStyleDeclaration get style;
+  external JSObject get style;
 }
 
 /// The **`CSSNamespaceRule`** interface describes an object representing a
@@ -2090,11 +2023,6 @@ extension type CSSStyleDeclaration._(JSObject _) implements JSObject {
   external String get zoom;
   external set zoom(String value);
 }
-extension type CSSStyleProperties._(JSObject _)
-    implements CSSStyleDeclaration, JSObject {
-  external String get cssFloat;
-  external set cssFloat(String value);
-}
 @JS()
 external $CSS get CSS;
 
@@ -2113,29 +2041,6 @@ extension type $CSS._(JSObject _) implements JSObject {
     String conditionTextOrProperty, [
     String value,
   ]);
-  external JSPromise<JSArray<CSSParserRule>> parseStylesheet(
-    CSSStringSource css, [
-    CSSParserOptions options,
-  ]);
-  external JSPromise<JSArray<CSSParserRule>> parseRuleList(
-    CSSStringSource css, [
-    CSSParserOptions options,
-  ]);
-  external JSPromise<CSSParserRule> parseRule(
-    CSSStringSource css, [
-    CSSParserOptions options,
-  ]);
-  external JSPromise<JSArray<CSSParserRule>> parseDeclarationList(
-    CSSStringSource css, [
-    CSSParserOptions options,
-  ]);
-  external CSSParserDeclaration parseDeclaration(
-    String css, [
-    CSSParserOptions options,
-  ]);
-  external CSSToken parseValue(String css);
-  external JSArray<CSSToken> parseValueList(String css);
-  external JSArray<JSArray<CSSToken>> parseCommaValueList(String css);
   external void registerProperty(PropertyDefinition definition);
   external CSSUnitValue number(num value);
   external CSSUnitValue percent(num value);
@@ -2201,9 +2106,5 @@ extension type $CSS._(JSObject _) implements JSObject {
   external CSSUnitValue dpcm(num value);
   external CSSUnitValue dppx(num value);
   external CSSUnitValue fr(num value);
-  external Worklet get animationWorklet;
   external HighlightRegistry get highlights;
-  external JSAny? get elementSources;
-  external Worklet get layoutWorklet;
-  external Worklet get paintWorklet;
 }

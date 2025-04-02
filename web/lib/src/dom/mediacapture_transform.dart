@@ -46,11 +46,3 @@ extension type MediaStreamTrackProcessorInit._(JSObject _) implements JSObject {
   external int get maxBufferSize;
   external set maxBufferSize(int value);
 }
-extension type VideoTrackGenerator._(JSObject _) implements JSObject {
-  external factory VideoTrackGenerator();
-
-  external WritableStream get writable;
-  external bool get muted;
-  external set muted(bool value);
-  external MediaStreamTrack get track;
-}

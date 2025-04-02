@@ -49,7 +49,6 @@ extension type Permissions._(JSObject _) implements JSObject {
   /// [Permissions API](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API)
   /// overview topic.
   external JSPromise<PermissionStatus> query(JSObject permissionDesc);
-  external JSPromise<PermissionStatus> request(JSObject permissionDesc);
 
   /// The **`revoke()`** method of the [Permissions] interface reverts a
   /// currently set permission back to its default state, which is usually
@@ -66,12 +65,6 @@ extension type Permissions._(JSObject _) implements JSObject {
   /// For more context, see the [original discussion to remove
   /// `permissions.revoke()`](https://github.com/w3c/permissions/issues/46).
   external JSPromise<PermissionStatus> revoke(JSObject permissionDesc);
-}
-extension type PermissionDescriptor._(JSObject _) implements JSObject {
-  external factory PermissionDescriptor({required String name});
-
-  external String get name;
-  external set name(String value);
 }
 
 /// The **`PermissionStatus`** interface of the
@@ -95,15 +88,4 @@ extension type PermissionStatus._(JSObject _) implements EventTarget, JSObject {
   external String get name;
   external EventHandler get onchange;
   external set onchange(EventHandler value);
-}
-extension type PermissionSetParameters._(JSObject _) implements JSObject {
-  external factory PermissionSetParameters({
-    required JSObject descriptor,
-    required PermissionState state,
-  });
-
-  external JSObject get descriptor;
-  external set descriptor(JSObject value);
-  external PermissionState get state;
-  external set state(PermissionState value);
 }

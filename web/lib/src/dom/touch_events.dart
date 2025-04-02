@@ -17,7 +17,6 @@ import 'dart:js_interop';
 
 import 'dom.dart';
 import 'html.dart';
-import 'input_device_capabilities.dart';
 import 'uievents.dart';
 
 typedef TouchType = String;
@@ -226,7 +225,7 @@ extension type TouchEventInit._(JSObject _)
     bool composed,
     Window? view,
     int detail,
-    InputDeviceCapabilities? sourceCapabilities,
+    JSObject? sourceCapabilities,
     int which,
     bool ctrlKey,
     bool shiftKey,
@@ -274,8 +273,6 @@ extension type TouchEvent._(JSObject _) implements UIEvent, JSObject {
     String type, [
     TouchEventInit eventInitDict,
   ]);
-
-  external bool getModifierState(String keyArg);
 
   /// **`touches`** is a read-only [TouchList] listing
   /// all the [Touch] objects for touch points that are currently in contact

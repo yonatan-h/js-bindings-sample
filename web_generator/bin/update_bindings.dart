@@ -41,6 +41,28 @@ $_usage''');
     throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
   }
 
+// So that the user doesn't have to always specify the
+// output subdir, sane defaults are used
+  var outputSubdir = argResult['output-subdir'] as String?;
+  if (outputSubdir == null) {
+    if (idlFile != null) {
+      outputSubdir = 'specific_bindings';
+    } else {
+      outputSubdir = 'dom';
+    }
+  } else {
+    if (p.split(outputSubdir).length > 1) {
+      throw ArgumentError(
+          'Invalid output subdir "$outputSubdir", must not contain any slashes');
+    } else if (idlFile != null && outputSubdir == 'dom') {
+      throw ArgumentError(
+          'Invalid output subdir "$outputSubdir", cannot be "dom" when idl file is provided');
+    } else if (outputSubdir == 'helpers') {
+      throw ArgumentError(
+          'Invalid output subdir "$outputSubdir", cannot be "helpers". It is reserved.');
+    }
+  }
+
   assert(p.fromUri(Platform.script).endsWith(_thisScript.toFilePath()));
 
   // Run `npm install` or `npm update` as needed.
@@ -73,14 +95,12 @@ $_usage''');
     );
   }
 
-// Different output locations to avoid mixing complete DOM bindings with
-// specific ones to keep the generated files more organized
-  Directory updatedDir;
-  if (idlFile == null) {
-    updatedDir = Directory(p.join(_webPackagePath, 'lib', 'src', 'dom'));
-  } else {
-    updatedDir =
-        Directory(p.join(_webPackagePath, 'lib', 'src', 'specific_bindings'));
+//Since directories can be dynamically specified, make sure to create them
+// if they don't exist
+  final outputDir = p.join(_webPackagePath, 'lib', 'src');
+  final updatedDir = Directory(p.join(outputDir, outputSubdir));
+  if (!updatedDir.existsSync()) {
+    updatedDir.createSync(recursive: true);
   }
 
   final existingFiles =
@@ -100,7 +120,9 @@ $_usage''');
     'node',
     [
       'main.mjs',
-      '--output-directory=${p.join(_webPackagePath, 'lib', 'src')}',
+      '--output-directory=$outputDir',
+      '--output-subdir=$outputSubdir',
+      '--import-file=${outputSubdir + '.dart'}',
       if (considerAll) '--consider-all',
       if (idlFile != null) '--idl=$idlFile',
     ],
@@ -288,4 +310,9 @@ final _parser = ArgParser()
       abbr: 'i',
       help:
           'Generate bindings for an IDL file and its dependencies. Choose file name from https://github.com/w3c/webref/tree/main/ed/idl',
-      valueHelp: 'file.idl');
+      valueHelp: 'file.idl')
+  ..addOption('output-subdir',
+      abbr: 'o',
+      help:
+          'The subdirectory name inside the output directory where the bindings will be generated to.',
+      valueHelp: 'dom');

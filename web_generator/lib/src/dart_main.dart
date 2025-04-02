@@ -34,15 +34,24 @@ void main(List<String> args) async {
   if (idlFile != null && p.extension(idlFile) != '.idl') {
     throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
   }
+  final rootImportFile = argResult['import-file'] as String;
+  if (p.extension(rootImportFile) != '.dart') {
+    throw ArgumentError(
+        'Invalid file "$rootImportFile", must have .dart extension');
+  }
+  final outputSubdir = argResult['output-subdir'] as String;
+  if (p.split(outputSubdir).length > 1) {
+    throw ArgumentError(
+        'Invalid subdirectory "$outputSubdir", must not contain a path');
+  }
 
   await _generateAndWriteBindings(
-    outputDirectory: argResult['output-directory'] as String,
-    considerAll: argResult['consider-all'] as bool,
-    languageVersion: Version.parse(languageVersionString),
-    idlFile: idlFile,
-    outputSubDirectory: idlFile == null ? 'dom' : 'specific_bindings',
-    rootImportFile: idlFile == null ? 'dom.dart' : 'specific_bindings.dart',
-  );
+      outputDirectory: argResult['output-directory'] as String,
+      outputSubDirectory: outputSubdir,
+      considerAll: argResult['consider-all'] as bool,
+      languageVersion: Version.parse(languageVersionString),
+      idlFile: idlFile,
+      rootImportFile: argResult['import-file'] as String);
 }
 
 Future<void> _generateAndWriteBindings({
@@ -84,14 +93,23 @@ final _parser = ArgParser()
   ..addOption('output-directory',
       mandatory: true, help: 'Directory where bindings will be generated to.')
 
-  // Mirror the flags from update_bindings.dart to maintain consistency across
-  // the CLI tools
+  // Mirror the flags from update_bindings.dart as much as possible
+  // to maintain consistency across the CLI tools
+  ..addOption('output-subdir',
+      mandatory: true,
+      help:
+          'The subdirectory name inside the output directory where the bindings will be generated to. Note that its no a path.',
+      valueHelp: 'dom')
+  ..addOption('import-file',
+      mandatory: true,
+      help:
+          'The name of the file that exports all bindings inside the --output-subdir. This file will be generated in the output directory.',
+      valueHelp: 'dom.dart')
   ..addFlag('consider-all',
       negatable: false,
       help:
           'Allow non-standard/experimental api definitions to be also be used when generating bindings')
   ..addOption('idl',
-      abbr: 'i',
       help:
           'Generate bindings for an IDL file and its dependencies. Choose file name from https://github.com/w3c/webref/tree/main/ed/idl',
       valueHelp: 'file.idl');

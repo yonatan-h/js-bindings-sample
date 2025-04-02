@@ -17,45 +17,8 @@ import 'dart:js_interop';
 
 import 'css_typed_om.dart';
 import 'dom.dart';
-import 'web_animations.dart';
 
 typedef IterationCompositeOperation = String;
-typedef AnimationTriggerType = String;
-extension type GroupEffect._(JSObject _) implements JSObject {
-  external factory GroupEffect(
-    JSArray<AnimationEffect>? children, [
-    JSAny timing,
-  ]);
-
-  external GroupEffect clone();
-  external void prepend([
-    AnimationEffect effect1,
-    AnimationEffect effect2,
-    AnimationEffect effect3,
-    AnimationEffect effect4,
-  ]);
-  external void append([
-    AnimationEffect effect1,
-    AnimationEffect effect2,
-    AnimationEffect effect3,
-    AnimationEffect effect4,
-  ]);
-  external AnimationNodeList get children;
-  external AnimationEffect? get firstChild;
-  external AnimationEffect? get lastChild;
-}
-extension type AnimationNodeList._(JSObject _) implements JSObject {
-  external AnimationEffect? item(int index);
-  external int get length;
-}
-extension type SequenceEffect._(JSObject _) implements GroupEffect, JSObject {
-  external factory SequenceEffect(
-    JSArray<AnimationEffect>? children, [
-    JSAny timing,
-  ]);
-
-  external SequenceEffect clone();
-}
 extension type TimelineRangeOffset._(JSObject _) implements JSObject {
   external factory TimelineRangeOffset({
     String? rangeName,
@@ -112,43 +75,4 @@ extension type AnimationPlaybackEventInit._(JSObject _)
   external set currentTime(CSSNumberish? value);
   external CSSNumberish? get timelineTime;
   external set timelineTime(CSSNumberish? value);
-}
-extension type AnimationTrigger._(JSObject _) implements JSObject {
-  external factory AnimationTrigger([AnimationTriggerOptions options]);
-
-  external AnimationTimeline get timeline;
-  external set timeline(AnimationTimeline value);
-  external AnimationTriggerType get type;
-  external set type(AnimationTriggerType value);
-  external JSAny? get rangeStart;
-  external set rangeStart(JSAny? value);
-  external JSAny? get rangeEnd;
-  external set rangeEnd(JSAny? value);
-  external JSAny? get exitRangeStart;
-  external set exitRangeStart(JSAny? value);
-  external JSAny? get exitRangeEnd;
-  external set exitRangeEnd(JSAny? value);
-}
-extension type AnimationTriggerOptions._(JSObject _) implements JSObject {
-  external factory AnimationTriggerOptions({
-    AnimationTimeline? timeline,
-    AnimationTriggerType? type,
-    JSAny rangeStart,
-    JSAny rangeEnd,
-    JSAny exitRangeStart,
-    JSAny exitRangeEnd,
-  });
-
-  external AnimationTimeline? get timeline;
-  external set timeline(AnimationTimeline? value);
-  external AnimationTriggerType? get type;
-  external set type(AnimationTriggerType? value);
-  external JSAny get rangeStart;
-  external set rangeStart(JSAny value);
-  external JSAny get rangeEnd;
-  external set rangeEnd(JSAny value);
-  external JSAny get exitRangeStart;
-  external set exitRangeStart(JSAny value);
-  external JSAny get exitRangeEnd;
-  external set exitRangeEnd(JSAny value);
 }

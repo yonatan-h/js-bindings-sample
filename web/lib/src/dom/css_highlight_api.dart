@@ -96,17 +96,4 @@ extension type Highlight._(JSObject _) implements JSObject {
 ///
 /// API documentation sourced from
 /// [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/HighlightRegistry).
-extension type HighlightRegistry._(JSObject _) implements JSObject {
-  external JSArray<Highlight> highlightsFromPoint(
-    num x,
-    num y, [
-    HighlightsFromPointOptions options,
-  ]);
-}
-extension type HighlightsFromPointOptions._(JSObject _) implements JSObject {
-  external factory HighlightsFromPointOptions(
-      {JSArray<ShadowRoot> shadowRoots});
-
-  external JSArray<ShadowRoot> get shadowRoots;
-  external set shadowRoots(JSArray<ShadowRoot> value);
-}
+extension type HighlightRegistry._(JSObject _) implements JSObject {}
