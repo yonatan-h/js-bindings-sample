@@ -1484,8 +1484,8 @@ class Translator {
       }
     }
 
-    //The root import file can be specific_binding.dart instead of dom.dart if
-    // an idl file is specified
+    // Root import filename is passed as a variable instead
+    // of being locally declared
     dartLibraries[rootImportFileName] = generateRootImport(dartLibraries.keys);
 
     return dartLibraries;

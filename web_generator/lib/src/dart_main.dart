@@ -28,8 +28,8 @@ void main(List<String> args) async {
   final ArgResults argResult;
   argResult = _parser.parse(args);
 
-  //Double check the file extension here even if update_bindings.dart
-  //validates it
+  // Double check arguments for safety even if
+  // update_bindings.dart already validates them
   final idlFile = argResult['idl'] as String?;
   if (idlFile != null && p.extension(idlFile) != '.idl') {
     throw ArgumentError('Invalid file "$idlFile", must have .idl extension');
@@ -62,7 +62,8 @@ Future<void> _generateAndWriteBindings({
   required String rootImportFile,
   String? idlFile,
 }) async {
-  ensureDirectoryExists('$outputDirectory/$outputSubDirectory');
+  //use p.join to ensure the path is valid in all platforms
+  ensureDirectoryExists(p.join(outputDirectory, outputSubDirectory));
 
   final bindings = await generateBindings(
       packageRoot, outputSubDirectory, rootImportFile,
@@ -73,7 +74,7 @@ Future<void> _generateAndWriteBindings({
     final library = entry.value;
 
     final contents = _emitLibrary(library, languageVersion).toJS;
-    fs.writeFileSync('$outputDirectory/$libraryPath'.toJS, contents);
+    fs.writeFileSync(p.join(outputDirectory, libraryPath).toJS, contents);
   }
 }
 

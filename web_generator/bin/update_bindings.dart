@@ -114,7 +114,7 @@ $_usage''');
     for (final file in existingFiles) file.path: file.lastModifiedSync(),
   };
 
-  // Run app with `node`.
+  // add new arguments to main.mjs such as --outpt-subdir, --idl, and --consider-all
   final considerAll = argResult['consider-all'] as bool;
   await _runProc(
     'node',
@@ -122,7 +122,7 @@ $_usage''');
       'main.mjs',
       '--output-directory=$outputDir',
       '--output-subdir=$outputSubdir',
-      '--import-file=${outputSubdir + '.dart'}',
+      '--import-file=${'$outputSubdir.dart'}',
       if (considerAll) '--consider-all',
       if (idlFile != null) '--idl=$idlFile',
     ],
@@ -299,7 +299,7 @@ final _parser = ArgParser()
   ..addFlag('help', negatable: false)
 
 // Replaces 'generate-all' to emphasise that it no longer automatically
-// generates bindings for all non-standard or experimental APIs.Now that
+// generates bindings for all non-standard or experimental APIs. Now that
 // specific IDL files can be targeted, non-standard/experimental bindings
 // are only created when needed.
   ..addFlag('consider-all',
@@ -309,10 +309,14 @@ final _parser = ArgParser()
   ..addOption('idl',
       abbr: 'i',
       help:
-          'Generate bindings for an IDL file and its dependencies. Choose file name from https://github.com/w3c/webref/tree/main/ed/idl',
+          'Generate bindings for an IDL file and its dependencies. Choose file name from https://github.com/w3c/webref/tree/curated/ed/idl',
       valueHelp: 'file.idl')
+
+// So that users can now freely specify the directory where
+//the generated bindings reside. Works for both generating bindings with or without
+// the --idl option
   ..addOption('output-subdir',
       abbr: 'o',
       help:
-          'The subdirectory name inside the output directory where the bindings will be generated to.',
+          'The subdirectory name inside web/lib/src/ where the bindings will be generated to.',
       valueHelp: 'dom');
